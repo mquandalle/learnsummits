@@ -16,6 +16,32 @@
     });
 
     map.on("load", function () {
+      // Ajoutez le layer pour le terrain en 3D
+      map.addSource("terrain-source", {
+        type: "raster-dem",
+        url: "https://api.maptiler.com/tiles/terrain-rgb-v2/tiles.json?key=2QY0a1dK2gB027NRIOkD",
+      });
+
+      map.setTerrain({
+        source: "terrain-source",
+        exaggeration: 1.5,
+      });
+
+      // Ajoutez le layer pour les ombres
+      map.addSource("hillshade-source", {
+        type: "raster",
+        url: "https://api.maptiler.com/tiles/hillshade/tiles.json?key=2QY0a1dK2gB027NRIOkD",
+      });
+
+      map.addLayer({
+        id: "hillshade-layer",
+        type: "raster",
+        source: "hillshade-source",
+        paint: {
+          "raster-opacity": 0.5, // réduisez l'opacité pour des ombres plus légères
+        },
+      });
+
       map.on("click", function (e) {
         // Obtenir les entités sous le point cliqué
         const features = map.queryRenderedFeatures(e.point, {});
